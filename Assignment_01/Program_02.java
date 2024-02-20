@@ -42,11 +42,7 @@ public class Program_02 {
 		else if(days.SATURDAY.ordinal() == no)
 			System.out.println("SATURDAY");
 		else
-			System.out.println("Wrong Inpur...");
-		
-		System.out.println(days.SATURDAY);
-		System.out.println(days.SATURDAY.ordinal());
-		
+			System.out.println("Wrong Inpur...");		
 		
 		s.close();
 	}
