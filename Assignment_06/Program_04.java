@@ -20,6 +20,9 @@ public class Program_04 {
 	}
 
 	private static boolean isValidEmail(String email) {
+
+		if(email.length() > 0 && (email.charAt(0) == '@' || Character.isDigit(email.charAt(0)) || email.charAt(email.length()-1) == '@' ))
+			return false;
 		
 		String[] str = email.split("@");
 		
