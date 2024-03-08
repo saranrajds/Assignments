@@ -90,11 +90,12 @@ class PersonBMI {
 	
 	void showPersonDetails(List<Person> personList) {
 		
-		System.out.println("Name		| BMI		| Remark");
+		String header = String.format("%s %10s %8s", "Name", "BMI", "Remark");
+		System.out.println(header);
 		System.out.println("----------------------------------");
 		for(Person person : personList)
 		{
-			String str = String.format("%s		%.1f		%s", person.getName(), person.getWeigth(), person.getWeightStatus());
+			String str = String.format("%s %10.1f %8s", person.getName(), person.getWeigth(), person.getWeightStatus());
 			System.out.println(str);
 		}
 	}
