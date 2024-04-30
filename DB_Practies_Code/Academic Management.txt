@@ -1,0 +1,263 @@
+Academic Management
+------------------
+
+Commands
+---------
+ -> create database academicmanagement;
+ 
+tblStudent
+----------
+	-> id int
+	-> name varchar(30)
+	-> DOB date
+	-> Address text()
+	-> isActive boolean
+	-> PhoneNumber bigint
+	-> createdDate datetime
+	-> modifiedDate datetime
+	
+	create table tblStudent(
+	  id int, 
+	  name varchar(100), 
+	  DOB date, 
+	  Address varchar(100), 
+	  phoneNumber bigint, 
+	  isActive boolean, 
+	  createdDate datetime, 
+	  modifiedDate datetime
+	);
+
+							
+	Alter table tblStudent add age tinyint;
+	Alter table tblStudent add CONSTRAINT phoneNo check(phoneNumber REGEXP '^[\\+\\s0-9-]*$')
+	Alter table tblStudent add CONSTRAINT  ageValidtion check(age > 17)
+	Alter table tblStudent add Primary Key(id); 
+	ALTER TABLE tblStudent MODIFY COLUMN id INT AUTO_INCREMENT;
+	
+	
+	insert into tblStudent (
+	  name, DOB, address, p phoneNumber, isActive, 
+	  createdDate, modifiedDate
+	) 
+	values 
+	  (
+		"Saran", "1998-01-01", "123 Main St", 
+		1234567890, true, CURRENT_TIMESTAMP, 
+		CURRENT_TIMESTAMP
+	  );
+
+	INSERT INTO tblStudent (name, DOB, address, phoneNumber, isActive, createdDate, modifiedDate)
+	VALUES ("Saran", "1998-01-01", "123 Main St", 1234567890, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblStudent (name, DOB, address, phoneNumber, isActive, createdDate, modifiedDate, age)
+	VALUES ("Sujith", "2000-01-01", "456 Main St", 9090909090, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 20);
+
+	INSERT INTO tblStudent (name, DOB, address, phoneNumber, isActive, createdDate, modifiedDate, age)
+	VALUES ("Karthi", "2003-01-01", "789 Main St", 8989890903, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30);
+
+tblStaff
+--------
+	-> id int
+	-> name varchar(20)
+	-> PhoneNumber bigint
+	-> createdDate datetime
+	-> modifiedDate datetime
+	-> isActive boolean
+	
+	create table tblStaff(
+		id int, 
+		name varchar(100), 
+		phoneNumber bigint, 
+		isActive boolean, 
+		createdDate datetime, 
+		modifiedDate datetime
+	);
+							
+	Alter table tblStaff add native varchar(20);
+	ALTER TABLE tblStaff MODIFY COLUMN id INT AUTO_INCREMENT PRIMARY KEY;
+	Alter table tblStaff modify name varchar(30) NOT NULL;
+	doubt) ----- Alter table tblStaff add constraint phoneNo check(phoneNumber REGEXP '^[\\+\\s0-9-]*$');
+
+	INSERT INTO tblStaff (name, phoneNumber, isActive, createdDate, modifiedDate)
+	VALUES ('Kumar', 1234567890, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblStaff (name, phoneNumber, isActive, createdDate, modifiedDate)
+	VALUES ('John', 1234567890, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+tblSubject
+----------
+	-> id int
+	-> name varchar(20)
+	-> isActive boolean
+	-> createdDate datetime
+	-> modifiedDate datetime
+	
+	create table tblSubject(
+		id int primary key, 
+		name varchar(100), 
+		isActive boolean, 
+		createdDate datetime, 
+		modifiedDate datetime
+	);
+	
+	Alter table tblSubject modify id int AUTO_INCREMENT;				
+	Alter table tblSubject add constraint subNameUnique unique(name);
+	
+	INSERT INTO tblSubject (name, isActive, createdDate, modifiedDate)
+	VALUES ('Math', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblSubject (name, isActive, createdDate, modifiedDate)
+	VALUES ('Tamil', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	
+tblGrade
+--------
+	-> id int
+	-> text varchar(20)
+	-> isActive boolean
+	-> createdDate datetime
+	-> modifiedDate datetime
+	
+	create table tblGrade(
+		id int primary key, 
+		name varchar(100) unique, 
+		isActive boolean, 
+		createdDate datetime, 
+		modifiedDate datetime							
+	);
+							
+	Alter table tblGrade modify id int AUTO_INCREMENT;
+	
+	Alter table tblGrade add minMark int not null after isActive;
+	Alter table tblGrade add maxMark int not null after isActive;
+	Alter table tblGrade drop column maxMark;
+	Alter table tblGrade drop column minMark;
+	
+	update tblGrade set minMark = 81, maxMark = 100 where id = 1;
+	update tblGrade set minMark = 61, maxMark = 80 where id = 2;
+	update tblGrade set minMark = 41, maxMark = 60 where id = 3;
+	update tblGrade set minMark = 0, maxMark = 40 where id = 4;
+	
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('A', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('B', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('C', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('D', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('E', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+	INSERT INTO tblGrade (name, isActive, createdDate, modifiedDate)
+	VALUES ('F', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+
+tblTest
+-------
+	-> id int
+	-> studentId foreign key (key from Student table)
+	-> StaffId foreign key (key from staff table)
+	-> createdDate datetime
+	-> modifiedDate datetime
+	-> testStatus boolean
+	
+	create table tblTest(
+		id int AUTO_INCREMENT primary key, 
+		studentId int not null,							
+		StaffId int,
+		testStatus boolean, 
+		createdDate datetime, 
+		modifiedDate datetime,
+		foreign key (studentId) references tblStudent(id)
+	);
+							
+	Alter table tblTest add foreign key (StaffId) references tblStaff(id);
+	
+	INSERT INTO tblTest (studentId, StaffId, testStatus, createdDate, modifiedDate)
+	VALUES (1, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblTest (studentId, StaffId, testStatus, createdDate, modifiedDate)
+	VALUES (2, 2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+tblMark
+-------
+	-> id int
+	-> mark int
+	-> subjectId foreign key (key from Subject table)
+	-> testId foreign key (key from Test table)
+	-> gradeId foreign key (key from Grade table)
+							
+	CREATE TABLE tblMark (
+		  id int AUTO_INCREMENT primary key,
+		  subjectId int not null,
+		  mark int check (mark <= 100),
+		  testId int not null,
+		  gradeId int,
+		  createdDate datetime,
+		  modifiedDate datetime,
+		  foreign key (subjectId) references tblSubject(id),
+		  foreign key (testId) references tblTest(id),
+		  foreign key (gradeId) references tblGrade(id)
+	);
+			
+	INSERT INTO tblMark (subjectId, mark, testId, gradeId, createdDate, modifiedDate)
+	VALUES (1, 85, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblMark (subjectId, mark, testId, gradeId, createdDate, modifiedDate)
+	VALUES (2, 45, 1, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	
+	INSERT INTO tblMark (subjectId, mark, testId, gradeId, createdDate, modifiedDate)
+	VALUES (1, 35, 2, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblMark (subjectId, mark, testId, gradeId, createdDate, modifiedDate)
+	VALUES (1, 95, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	INSERT INTO tblMark (subjectId, mark, testId, gradeId, createdDate, modifiedDate)
+	VALUES (2, 79, 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+	
+	select 
+	  stu.name, 
+	  test.* 
+	from 
+	  tblStudent stu 
+	  left join tblTest test on stu.id = test.studentId
+
+	
+	select 
+	  stu.name as StudentName, 
+	  staff.name as StaffName, 
+	  sub.name as SubjectName,
+	  mark.mark as Mark,
+	  grade.name as GradeName
+	from 
+	  tblStudent stu 
+	  left join tblTest test on stu.id = test.studentId 
+	  inner join tblStaff staff on test.staffId = staff.id 
+	  inner join tblMark mark on test.id = mark.testId 
+	  inner join tblSubject sub on mark.subjectId = sub.id
+	  inner join tblGrade grade on mark.gradeId = grade.id
+	order by stu.id, SubjectName, Mark desc;
+	
+	
+	select 
+	  stu.name as StudentName, 
+	  staff.name as StaffName, 
+	  sub.name as SubjectName,
+	  mark.mark as Mark,
+	  grade.name as GradeName
+	from 
+	  tblStudent stu 
+	  left join tblTest test on stu.id = test.studentId 
+	  inner join tblStaff staff on test.staffId = staff.id 
+	  inner join tblMark mark on test.id = mark.testId 
+	  inner join tblSubject sub on mark.subjectId = sub.id
+	  inner join tblGrade grade on mark.gradeId = grade.id
+	order by stu.id, SubjectName, Mark desc;
+	 

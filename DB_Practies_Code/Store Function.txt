@@ -1,0 +1,22 @@
+DELIMITER $$ 
+create function getStudentCountByGrade(gradeVar varchar(2)) returns int
+READS SQL DATA
+begin
+	declare counts int default 0;
+    select count(*) into counts from student where grade = gradeVar;
+    return counts;
+end $$
+DELIMITER ;
+
+select getStudentCountByGrade('c');
+
+
+-- DELIMITER $$ 
+-- create trigger updateNewStudentName after insert on student for each row
+-- begin
+-- 	insert into newStudentName(name) values(new.name);
+-- end $$ 
+-- DELIMITER ;
+
+-- select * from newStudentName;
+-- INSERT INTO student (name, age, grade) VALUES('John Doe 123', 20, 'A');

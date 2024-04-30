@@ -1,0 +1,213 @@
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255) NOT NULL,
+    Age int
+);
+
+CREATE TABLE Persons2 (
+    ID int NOT NULL,
+    Age int
+);
+
+
+---------------------------------------------------
+-------------------CHECK CONSTRAINT----------------
+
+	Add Contrain After creating tables;
+	-----------------------------------
+		-> alter table Persons add check(age > 17)
+
+	Show table creating structure
+	------------------------------
+		-> show create table persons;
+
+	Drop Contrain
+	-------------
+		-> ALTER TABLE my_table
+		-> DROP CONSTRAINT check_age;
+
+		-> ALTER TABLE my_table
+		-> ADD CONSTRAINT check_age CHECK (age >= 18 AND age <= 65);
+
+	Column CONSTRAINT Modify
+	------------------------
+		-> We can not drop column level constrain
+		-> only possible drop then create column again.
+		-> ALTER TABLE Persons DROP COLUMN age;
+		-> ALTER TABLE Persons ADD COLUMN age INT;
+
+	We can not insert age value is less then 18 teen
+	------------------------------------------------
+		-> mysql> insert into persons values(1, 't1', 'r1', 17);
+			ERROR 3819 (HY000): Check constraint 'persons_chk_1' is violated.
+
+	Null value also accepted
+	------------------------
+		->	mysql> insert into persons values(1, 't1', 'r1', null);
+			Query OK, 1 row affected (0.00 sec)
+
+		-> mysql> insert into persons values(1, 't1', 'r1', null);
+			Query OK, 1 row affected (0.00 sec)
+	
+	If value is exits less then 10. Then add constraint
+	----------------------------------------------------
+			-> mysql> insert into persons values(1, 't1', 'r1', 10);
+				Query OK, 1 row affected (0.00 sec)
+		
+		It will never allow
+		-------------------
+			-> mysql> alter table persons add check(age > 17);
+				ERROR 3819 (HY000): Check constraint 'persons_chk_1' is violated.
+			-> mysql> select * from persons;
+		
+		After deleting it will allow
+		----------------------------
+			-> mysql> delete from persons where age = 10;
+				Query OK, 1 row affected (0.01 sec)
+			
+			-> mysql> alter table persons add check(age > 17);
+				Query OK, 4 rows affected (0.07 sec)
+				Records: 4  Duplicates: 0  Warnings: 0
+			
+			-> mysql> insert into persons values(1, 't1', 'r1', 10);
+				Query OK, 1 row affected (0.00 sec)
+			
+
+-----------------------------------------------------------
+	
+------------------------NOT NULL CONSTRAINT----------------
+
+	WE CAN NOT INSERT NULL VALUE IF WE SEETED NOT NULL CONSTRAINT
+	-------------------------------------------------------------
+		-> mysql> insert into persons(lastname, firstname, age) value('n1', 'n2', 17);
+			ERROR 1364 (HY000): Field 'ID' doesn't have a default value
+	
+	AFTER MODIFYING COLUMN THEN IT WILL ALLOW
+	-----------------------------------------
+		-> mysql> ALTER TABLE PERSONS MODIFY ID INT ;
+	
+	INSETED NULL VLAUE
+	------------------
+		-> mysql> insert into persons(lastname, firstname, age) value('n1', 'n2', 18);
+	
+	IF NULL VALUE IS CONTAINS THE CRETING CONSTRAINT COLUMNS IT WILL NOT ALLOW TO CREATE CONSTRAINT
+	-----------------------------------------------------------------------------------------------
+		-> mysql> ALTER TABLE PERSONS MODIFY ID INT NOT NULL;
+			ERROR 1138 (22004): Invalid use of NULL value
+
+
+
+-----------------------------------------------------------
+	
+------------------------PRIMATY KEY CONSTRAINT----------------
+
+	ALREADY CONTAINS VALUE WITH SAME VALUE 
+	--------------------------------------
+		-> mysql> ALTER TABLE PERSONS MODIFY COLUMN ID INT PRIMARY KEY;
+			ERROR 1062 (23000): Duplicate entry '1' for key 'persons.PRIMARY'
+			
+		-> mysql> alter table persons2 modify id int primary key;
+			ERROR 1138 (22004): Invalid use of NULL value
+	
+	TRUNCATED TABLES
+	----------------
+		-> mysql> TRUNCATE TABLE PERSONS
+			Query OK, 0 rows affected (0.05 sec)
+	
+	INSERTED WITH NULL VALUE
+	------------------------
+	
+		-> mysql> insert into persons(ID, lastname, firstname, age) value(1, 'n1', 'n2', 18);
+			Query OK, 1 row affected (0.00 sec)
+
+		-> mysql> insert into persons(ID, lastname, firstname, age) value(2, 'n1', 'n2', 18);
+			Query OK, 1 row affected (0.00 sec)
+
+		-> mysql> insert into persons(lastname, firstname, age) value('n1', 'n2', 18);
+			Query OK, 1 row affected (0.00 sec)
+	
+	WHILE ADDING NULL AND PRIMARY KEY CONSTRAINT
+	-------------------------------	
+		-> mysql> ALTER TABLE PERSONS MODIFY ID INT NOT NULL;
+			ERROR 1138 (22004): Invalid use of NULL value
+		-> mysql> ALTER TABLE PERSONS MODIFY ID INT PRIMARY KEY;
+			ERROR 1138 (22004): Invalid use of NULL value
+
+	AFTER UPDATIING NULL TO VALUE;
+	------------------------------
+		-> mysql> UPDATE PERSONS SET ID = 3 WHERE ID IS NULL;
+			Query OK, 0 rows affected (0.00 sec)
+	
+	ADDED PRIMARY KEY
+	-----------------
+		-> mysql> ALTER TABLE PERSONS MODIFY ID INT PRIMARY KEY;
+			Query OK, 0 rows affected (0.12 sec)
+			
+	WE CAN NOT INSERT EXCEPT PRIMARY KEY COLUMN VALUE IF WE DID NOT SET AUTO_INCREMENT
+	----------------------------------------------------------------------------------
+		-> mysql> insert into persons(lastname, firstname, age) value('n1', 'n2', 18);
+			ERROR 1364 (HY000): Field 'ID' doesn't have a default value
+
+	WE CAN INSERT USING PRIMARY KEY COLUMN VALUE IF WE DID NOT SET AUTO_INCREMENT
+	------------------------------------------------------------------------------
+		-> mysql> insert into persons(ID, lastname, firstname, age) value(4, 'n1', 'n2', 18);
+			Query OK, 1 row affected (0.00 sec)
+
+	AFTER ADDING AUTO_INCREMENT. IT IS ALLOW DONT MENTION ID Column
+	----------------------------------------------------------------
+		-> mysql> ALTER TABLE PERSONS MODIFY COLUMN ID INT AUTO_INCREMENT;
+			Query OK, 4 rows affected (0.08 sec)
+		
+		-> mysql> insert into persons(lastname, firstname, age) value('n1', 'n2', 18);
+			Query OK, 1 row affected (0.00 sec)
+			
+
+
+-----------------------------------------------------------
+	
+------------------------FOREIN KEY CONSTRAINT----------------
+
+	CREATED FOREIN KEY COLUM Persons
+	--------------------------------
+		-> mysql> alter table persons2 add column person int not null;
+	
+	IF THE CHILD.FOREIN KEY TABLE CONTAINS ROW WE CANNT APPLY FOREIN KEY;
+	---------------------------------------------------------------------
+		-> mysql> ALTER TABLE PersonS2 ADD FOREIGN KEY(PERSON) REFERENCES PERSONS(ID);
+			Query OK, 0 rows affected (0.07 sec)
+	
+	WE CAN ONLY ONLY PRIMARY KEY VALUE FROM PARENT TP CHILD TABLE FOREIGN Column
+	-----------------------------------------------------------------------------
+	OTHER WISH IT WILL THROUGHT THE ERROR
+	-------------------------------------
+	AND 
+	
+	WE CAN NOT DELETE PARENT ROW IF THE VALUE IS PRESENT FOREIGN Column
+	--------------------------------------------------------------------
+		
+
+
+-----------------------------------------------------------
+	
+-----------------------UNIQUE CONSTRAINT-------------------
+		
+		IF CONTAINS DUPLICATE VLAUE WE CAN NOT ADD UNIQUE CONSTRAINT
+		------------------------------------------------------------
+			-> mysql> ALTER TABLE PERSONS2 ADD UNIQUE(ID);
+				ERROR 1062 (23000): Duplicate entry '18' for key 'persons.age'
+		
+			-> mysql> ALTER TABLE PERSONS2 ADD UNIQUE(ID);
+				Query OK, 0 rows affected (0.06 sec)
+
+		NULL VALUE ALSO ALLOWED
+		-----------------------
+			-> mysql> INSERT INTO PERSONS2(AGE, PERSON) VALUE(1, 4);
+			-> mysql> INSERT INTO PERSONS2 VALUE(1, NULL, 4);
+			
+			
+-----------------------------------------------------------
+	
+-----------------------INDEX CONSTRAINT--------------------
+
+			-> create index personsIndex on persons(firstname);

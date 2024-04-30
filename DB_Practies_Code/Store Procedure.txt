@@ -1,0 +1,57 @@
+-- CREATE TABLE student (
+--     id INT PRIMARY KEY AUTO_INCREMENT,
+--     name VARCHAR(50) NOT NULL,
+--     age INT,
+--     grade VARCHAR(2)
+-- );
+
+-- INSERT INTO student (name, age, grade) VALUES
+-- ('John Doe', 20, 'A'),
+-- ('Jane Smith', 19, 'B'),
+-- ('Michael Brown', 21, 'C'),
+-- ('Emily White', 18, 'A'),
+-- ('William Green', 20, 'B'),
+-- ('Jessica Black', 22, 'C'),
+-- ('Christopher Blue', 19, 'A'),
+-- ('Sarah Red', 21, 'B'),
+-- ('David Orange', 18, 'C'),
+-- ('Laura Pink', 20, 'A');
+
+--  DELIMITER &&
+--  create procedure getStudentDetailsWithInVar(in var1 int) 
+--  Begin 
+-- 	select * from student where id = var1; 
+-- End &&
+-- DELIMITER ;
+-- call getStudentDetailsWithInVar(100);
+
+
+-- DELIMITER &&  
+-- CREATE PROCEDURE getStudentDetails ()  
+-- BEGIN  
+--     select * from student;
+-- END &&  
+-- DELIMITER ;  
+
+ -- call getStudentDetails;
+
+--  DELIMITER &&
+--  create procedure getStudentDetailsWithOutVar(out topStudentName  varchar(50)) 
+--  Begin 
+-- 	select name into topStudentName from student where grade = "A" limit 1 ; 
+-- End &&
+-- DELIMITER ;
+
+-- call getStudentDetailsWithOutVar(@topStudentName);
+-- select @topStudentName;
+
+--  DELIMITER &&
+--  create procedure getStudentDetailsWithInOutVar(INOUT topStudentName  varchar(50)) 
+--  Begin 
+-- 	select name into topStudentName from student where grade = topStudentName limit 1 ; 
+-- End &&
+-- DELIMITER ;
+
+-- set @topStudentName = 'B';
+-- call getStudentDetailsWithInOutVar(@topStudentName);
+-- select @topStudentName;

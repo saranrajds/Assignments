@@ -1,0 +1,126 @@
+THIS MANAGEMENT ONLY CALCULATE WHI WON IN DIST LEVEL:
+----------------------------------------------------
+
+create database votermanagement;
+
+use votermanagement;
+
+create table candidate(
+  id int primary key auto_increment, 
+  party_id int not null, 
+  candidate_id int not null, 
+  constraint candidatePartyId foreign key(party_id) references parties(id), 
+  constraint candidateId foreign key(candidate_id) references voters(id)
+);
+
+alter table candidate add constraint uniquecandidateid unique(candidate_id); 
+
+create table district(
+  id int primary key auto_increment, 
+  name varchar(50) not null unique
+);
+
+create table town(
+  id int auto_increment primary key, 
+  name varchar(50) not null unique, 
+  dist_id int, 
+  CONSTRAINT distId foreign key(dist_id) references district(id)
+);
+
+CREATE TABLE voters (
+  id INT AUTO_INCREMENT PRIMARY KEY, 
+  name VARCHAR(50) NOT NULL unique, 
+  town_id INT, 
+  CONSTRAINT townId FOREIGN KEY(town_id) REFERENCES town(id)
+);
+
+create table parties(
+  id int primary key auto_increment, 
+  name varchar(20) not null unique, 
+);
+
+CREATE TABLE voterpoll (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    voter_id INT NOT NULL,
+    candidate_id INT NOT NULL,
+    CONSTRAINT voterpoll_voterId FOREIGN KEY (voter_id)
+        REFERENCES voters (id),
+    CONSTRAINT voterpoll_candidateId FOREIGN KEY (candidate_id)
+        REFERENCES candidate(candidate_id)
+)
+
+alter table voterpoll add constraint voterpollvoter_id_unique unique(voter_id);
+
+-------------------------------------------------------------------------------
+
+
+SELECT 
+    t.name AS Town_name,
+    v.name,
+    p.name AS Party_name,
+    COUNT(*) AS vote_Count
+FROM
+    voterpoll vp
+        INNER JOIN
+    voters v ON vp.candidate_id = v.id
+        INNER JOIN
+    candidate c ON vp.candidate_id = c.candidate_id
+        INNER JOIN
+    parties p ON c.party_id = p.id
+        INNER JOIN
+    town t ON v.town_id = t.id
+GROUP BY vp.candidate_id
+ORDER BY Town_name , vote_Count DESC;
+
+
+---------------------------------------------------------------------------------
+
+SELECT 
+    d.name District_Name, t.name Town_Name, p.name Party_Name, COUNT(c.party_id) AS Vote_Count
+FROM
+    candidate c
+        LEFT JOIN
+    voterpoll vp ON c.candidate_id = vp.candidate_id
+        LEFT JOIN
+    parties p ON c.party_id = p.id
+        LEFT JOIN
+    voters v ON vp.voter_id = v.id
+        LEFT JOIN
+    town t ON v.town_id = t.id
+		INNER JOIN
+    district d ON t.dist_id = d.id
+GROUP BY c.party_id , t.name
+ORDER BY t.name , Vote_Count DESC;
+
+	
+------------------------------------------------------------------------------------
+
+SELECT 
+    t1.Town_name,
+    t1.Party_name,
+    t1.name AS Candidate_Name,
+    t1.vote_Count,
+    ((vote_Count / Total_Vote_Counts) * 100) AS 'Per_(%)'
+FROM
+    (SELECT 
+        p.name AS Party_name,
+            t.name AS Town_name,
+            v.name,
+            COUNT(*) AS vote_Count
+    FROM
+        voterpoll vp
+    INNER JOIN voters v ON vp.candidate_id = v.id
+    INNER JOIN candidate c ON vp.candidate_id = c.candidate_id
+    INNER JOIN parties p ON c.party_id = p.id
+    INNER JOIN town t ON v.town_id = t.id
+    GROUP BY vp.candidate_id) t1
+        CROSS JOIN
+    (SELECT 
+        COUNT(*) AS Total_Vote_Counts
+    FROM
+        voterpoll) t2
+ORDER BY Town_name , vote_Count DESC;
+		
+----------------------------------------------------------------------------------
+
+

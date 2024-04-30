@@ -1,0 +1,263 @@
+Normalization
+-------------
+	Database normalization is a database design technique, 
+by which an existing schema is modified to minimize redundancy and dependency of data.
+	Normalization split a large table into smaller tables 
+and define relationships between them to increase the clarty in organizing data.
+
+
+Why Normalization needed?
+	-> To avoid redundency
+	-> To avaid/minimize anomalies or other issues
+	
+Anomaly
+-------
+	Problems that occure in poorly planned, unnormalized databse 
+where the data is stored in one table.
+
+Tpes of Anomalies
+-------------------
+	-> Insert
+	-> Delete
+	-> Update
+	
+Insert Anomaly
+--------------
+	-> Insert anomaly occurs when data of certain attribute
+	can not be inserted into the 
+database without the presence of other attributes
+
+Delete Anomaly
+--------------
+	-> Delete anomaly exists when data of certain attribute are lost .
+Becuase of the deletion of other attribute.
+
+Update Anomaly
+--------------
+	Update anomoly exists when one or more instances of duplicated data is
+updated but not all.
+
+
+First Normal Form (1NF)
+-----------------
+	A table is said to be in first normal form if the followiing
+condition exits.
+	-> The table should contain only atomic value attributes
+	-> Values stored in the column should be of the same domain
+	-> Every column name should have unique 
+	-> No dupliucate rows should exits
+	-> Primary/Composite key should be defined
+	-> Order of rows/columns does not matter.
+
+Second Normal Form (2NF)
+------------------
+	-> A table is said to be in 2ND, if it satisfies the following 2 condition
+		-> The table should be in 1NF
+		-> The table should not contain any partial dependencies
+		
+		(or)
+	-> All non-primary attrubutes should depend on the entire primary key
+	not on part of a primary key.
+	
+	-> if a partial dependency exists, remove the partially dependent attrubutes
+	from the relation by placing then in a new relation along with a copy of theis determinent
+
+Third Normal Form (3NF)
+-----------------
+	-> A table is said to be in 3NF or third normal form , if the folling requirement are satisfied
+		-> All 2NF requirement are fulfilled.
+		-> There is no transitive dependency
+	(i.e) A non-key columns should not depend on another non-key column
+			A relation is in 3NF, if alteast one of the following condition 
+	holds in every non-trivial functional dependency 
+		
+Convetion to 3NF
+----------------
+	Remove the transitively dependent attribute from the relation and place 
+it in a new relation along with the determinant
+
+
+BCNF (Boyce Codd Normal Form)
+-----------------------------
+	-> It is also called as 3.5NF
+	-> A table is said to be in BCNF, if it satisfies the followiing condition.
+		-> It should satisfy 3NF
+		-> All determinants must be candidate key
+		
+Fourth Normal Form (4NF)
+------------------------
+		-> A table is said to be in 4NF, if it satisfies the followiing condition.
+			-> It is in BCNF
+			-> It has no multi value dependency
+		Multi value dependency
+		----------------------
+			-> A table should have atleast 3 columns
+			-> For a dependency A->B, for a single value of A, multiple value of B exists
+			-> In a relation R(A, B, C) for a multi value dependency A->B, then B and C should be independent of each other.
+
+			
+Fifth Normal Form (5NF)
+-----------------
+
+	-> A table is said to be in 5NF, if it satisfies the followiing condition.
+		-> It should satisfy 4NF
+		-> It does not contain join dependency or further 
+	lossless decompasition could not be acheved
+		
+	-> It is also called as PJNF (Project Join Normal Form) 
+	
+	
+Database normalization;
+
+Normalization students;
+--------------------
+Create table students(id int, name varchar(50), location varchar(20), Course varchar(20), course_duration varchar(20))
+insert into students values(1, 'saran', 'tenkasi', 'Java', '6 Months')
+insert into students values(2, 'karan', 'tirunelvali', 'C', '3 Months');
+insert into students values(3, 'dhoni', 'Theni', 'DB', '3 Months');
+insert into students values(4, 'sharma', 'Chennai', 'DB', '4 Months');
+insert into students values(5, 'raina', 'Madurai', 'Java', '5 Months');
+
+students2;
+---------
+Create table students2(id int, name varchar(50), location varchar(20), Course_id int);
+Create table course(id int, name varchar(20), course_duration varchar(20));
+
+insert into students2 values(1, 'saran', 'tenkasi', 1);
+insert into students2 values(2, 'karan', 'tirunelvali', 2);
+insert into students2 values(3, 'dhoni', 'Theni', 3);
+insert into students2 values(4, 'sharma', 'Chennai', 4);
+insert into students2 values(5, 'raina', 'Madurai', 5);
+
+insert into course values(1, 'Java', '6 Months')
+insert into course values(2, 'C', '3 Months');
+insert into course values(3, 'DB', '3 Months');
+
+
+Create table stu1nf(id int, name varchar(50), age varchar(30), address varchar(20), contact_no varchar(30))
+insert into stu1nf values(1, 'saran', 18, 'Tenkasi', 'p1, p2');
+insert into stu1nf values(2, 'suman', 24, 'madurai', 'p1');
+insert into stu1nf values(3, 'katan', 'seventeen', 'nellai', 'p1, p2');
+insert into stu1nf values(4, 'mani', 20, 'chennai', 'p1');
+insert into stu1nf values(5, 'suresh', 'eighteen', 'theni', 'p1');
+
+Create table stu1nf2(id int, name varchar(50), age varchar(30), address varchar(20), state varchar(20), contact_no varchar(30))
+insert into stu1nf2 values(1, 'saran', 18, 'Tenkasi', 'tn', 'p1');
+insert into stu1nf2 values(1, 'saran', 18, 'Tenkasi', 'tn', 'p2');
+insert into stu1nf2 values(2, 'suman', 24, 'madurai','tn', 'p1');
+insert into stu1nf2 values(3, 'katan', 'seventeen', 'nellai','tn', 'p1');
+insert into stu1nf2 values(3, 'katan', 'seventeen', 'nellai','tn', 'p2');
+insert into stu1nf2 values(4, 'mani', 20, 'chennai','tn', 'p1');
+insert into stu1nf2 values(5, 'suresh', 'eighteen', 'theni','tn', 'p1');
+
+
+2nf 
+create table stu2nf (id int, course_no varchar(20), course_fee int)
+insert into stu2nf values(101, 'c1', 1500);
+insert into stu2nf values(101, 'c3', 1500);
+insert into stu2nf values(102, 'c1', 1500);
+insert into stu2nf values(103, 'c1', 1500);
+insert into stu2nf values(104, 'c2', 2500);
+insert into stu2nf values(104, 'c3', 1500);
+insert into stu2nf values(105, 'c4', 3500);
+
+create table stucourse2nf(id int, course_id varchar(20));
+insert into stucourse2nf values(101, '1');
+insert into stucourse2nf values(101, '3');
+insert into stucourse2nf values(102, '1');
+insert into stucourse2nf values(103, '1');
+insert into stucourse2nf values(104, '2');
+insert into stucourse2nf values(104, '3');
+insert into stucourse2nf values(105, '4');
+
+create table course2nf (id int, course_no varchar(20), course_fee int);
+insert into course2nf values(1, 'c1', 1500);
+insert into course2nf values(2, 'c3', 2000);
+insert into course2nf values(3, 'c3', 1500);
+insert into course2nf values(4, 'c4', 3000);
+
+create table bookdetails(id int, category_id int, category_type varchar(20), price int);
+insert into bookdetails values(1001, 1, 'competitive', 600);
+insert into bookdetails values(1002, 1, 'sports', 600);
+insert into bookdetails values(1003, 2, 'sports', 630);
+insert into bookdetails values(1004, 1, 'competitive', 650);
+insert into bookdetails values(1005, 3, 'novel', 500);
+insert into bookdetails values(1006, 4, 'poetry', 400);
+
+create table book3nf(id int, category_id int, price int);
+insert into book3nf values(1001, 1, 600);
+insert into book3nf values(1002, 1, 600);
+insert into book3nf values(1003, 2, 630);
+insert into book3nf values(1004, 1, 650);
+insert into book3nf values(1005, 3, 500);
+insert into book3nf values(1006, 4, 400);
+
+create table category3nf(id int, category_type varchar(20));
+insert into category3nf values(1, 'competitive');
+insert into category3nf values(2, 'sports');
+insert into category3nf values(3, 'novel');
+insert into category3nf values(4, 'poetry');
+
+
+create table stubcnf(student varchar(30), course varchar(30), tracher varchar(30));
+insert into stubcnf values('saran', 'java', 'priya');
+insert into stubcnf values('mari', 'java', 'kumar');
+insert into stubcnf values('selva', 'python', 'narmatha');
+insert into stubcnf values('kani', 'python', 'ramya');
+insert into stubcnf values('kannan', 'java', 'mathu');
+
+create table studentbcnf(student varchar(30), tracher varchar(30));
+insert into studentbcnf values('saran', 'priya');
+insert into studentbcnf values('mari', 'kumar');
+insert into studentbcnf values('selva', 'narmatha');
+insert into studentbcnf values('kani', 'ramya');
+insert into studentbcnf values('kannan', 'mathu');
+
+create table teacherbcnf(tracher varchar(30), course varchar(30));
+insert into teacherbcnf values('priya', 'java');
+insert into teacherbcnf values('kumar', 'java');
+insert into teacherbcnf values('narmatha', 'python');
+insert into teacherbcnf values('ramya', 'python');
+insert into teacherbcnf values('mathu', 'java');
+
+create table stu4nf(roll_no int , course varchar(10), hobby varchar(20));
+insert into stu4nf values(101, 'php', 'cricket');
+insert into stu4nf values(101, 'php', 'dencing');
+insert into stu4nf values(101, 'MYSQL', 'cricket');
+insert into stu4nf values(101, 'MYSQL', 'dencing');
+
+create table sturollno4nf(roll_no int, course varchar(20));
+insert into sturollno4nf values(101, 'php');
+insert into sturollno4nf values(101, 'java');
+insert into sturollno4nf values(102, 'c#');
+insert into sturollno4nf values(103, 'html');
+insert into sturollno4nf values(103, 'css');
+
+create table studencing4nf(roll_no int, hoppy varchar(20));
+insert into studencing4nf values(101, 'cricket');
+insert into studencing4nf values(101, 'dencing');
+insert into studencing4nf values(102, 'drawing');
+insert into studencing4nf values(103, 'gaming');
+insert into studencing4nf values(103, 'drawing');
+
+
+create table sub5nf(subject varchar(20), lecturer varchar(20), semester  varchar(20));
+insert into sub5nf values('computer', 'peter', 'sem1');
+insert into sub5nf values('computer', 'john', 'sem1');
+insert into sub5nf values('math', 'john', 'sem1');
+insert into sub5nf values('math', 'akash', 'sem3');
+insert into sub5nf values('chemistry', 'praveen', 'sem1');
+
+create table subonly5nf(semester varchar(20), subject varchar(20));
+insert into subonly5nf values('sem1', 'computer');
+insert into subonly5nf values('sem1', 'math');
+insert into subonly5nf values('sem1', 'chemistry');
+insert into subonly5nf values('sem2', 'math');
+
+
+create table sub5nf(subject varchar(20), lecturer varchar(20), semester  varchar(20));
+insert into sub5nf values('computer', 'peter', 'sem1');
+insert into sub5nf values('computer', 'john', 'sem1');
+insert into sub5nf values('math', 'john', 'sem1');
+insert into sub5nf values('math', 'akash', 'sem3');
+insert into sub5nf values('chemistry', 'praveen', 'sem1');

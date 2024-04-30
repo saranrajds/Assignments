@@ -1,0 +1,175 @@
+Sub-Query
+---------
+	-> Sub-Query is an simply and sql query, which is placed another sql query.
+
+mysql> create database employee;
+Query OK, 1 row affected (0.00 sec)
+
+create table employee(id int, name varchar(10), dept_id varchar(10), salary int);
+Query OK, 0 rows affected (0.03 sec)
+
+insert into employee values(120, 'Monica', 1, 5000);
+insert into employee values(121, 'Rosalin', 1, 6000);
+insert into employee values(122, 'Ibrahim', 2', 8000);
+insert into employee values(123, 'Bikram', 3, 8000);
+insert into employee values(124, 'Dheetaj', 2, 11000);
+
+Question:
+--------
+	== Find the employee who's salary is more than the average salary earned by all employees
+select * from employee where salary >= ( select avg(salary) as salary from employee)
+
+mysql> select * from employee;
++------+---------+---------+--------+
+| id   | name    | dept_id | salary |
++------+---------+---------+--------+
+|  120 | Monica  | Admin   |   5000 |
+|  121 | Rosalin | IT      |   6000 |
+|  122 | Ibrahim | IT      |   8000 |
+|  123 | Bikram  | IT      |   8000 |
+|  124 | Dheetaj | IT      |  11000 |
++------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+
+mysql> select avg(salary) from employee;
++-------------+
+| avg(salary) |
++-------------+
+|   7600.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+Types
+-----
+	1 Scalat Sub-Query
+	2 Multiple row Sub-Query
+	3 Correlated Sub-Query
+	
+1 -> Scalat Sub-Query
+---------------------
+	-> Simple Sub-Query which always return one and one column
+	
+	mysql> select * from employee where salary >= ( select avg(salary) as salary from employee);
+	+------+---------+---------+--------+
+	| id   | name    | dept_id | salary |
+	+------+---------+---------+--------+
+	|  122 | Ibrahim | IT      |   8000 |
+	|  123 | Bikram  | IT      |   8000 |
+	|  124 | Dheetaj | IT      |  11000 |
+	+------+---------+---------+--------+
+	3 rows in set (0.00 sec)
+
+2 -> Multiple row Sub-Query
+---------------------------
+	-> Sub-Query which returns multiple column and multiple row
+	-> Sub-Query which returns only one column and multiple row
+	
+Question:
+	
+	== Find the employee who earn the highest salary in each dept.
+	
+mysql> select dept_id, max(salary) from employee group by dept_id;
++---------+-------------+
+| dept_id | max(salary) |
++---------+-------------+
+| Admin   |        5000 |
+| IT      |       11000 |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee where (dept_id, salary) in (select dept_id, max(salary) as salary from employee group by dept_id);
++------+---------+---------+--------+
+| id   | name    | dept_id | salary |
++------+---------+---------+--------+
+|  120 | Monica  | Admin   |   5000 |
+|  124 | Dheetaj | IT      |  11000 |
++------+---------+---------+
+
+
+Single column and multiple row
+------------------------------
+
+mysql> create table dept(id int primary key auto_increment, name varchar(50));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into dept(name) values('IT');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into dept(name) values('Admin');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into dept(name) values('Finance');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into dept(name) values('Acoount');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into dept(name) values('HR');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from dept;
++----+---------+
+| id | name    |
++----+---------+
+|  1 | IT      |
+|  2 | Admin   |
+|  3 | Finance |
+|  4 | Acoount |
+|  5 | HR      |
++----+---------+
+5 rows in set (0.00 sec)
+
+mysql> alter table employee add constraint fkey foreign key(dept_id) references dept(id);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++------+---------+---------+--------+
+| id   | name    | dept_id | salary |
++------+---------+---------+--------+
+|  120 | Monica  |       1 |   5000 |
+|  121 | Rosalin |       1 |   6000 |
+|  124 | Dheetaj |       2 |  11000 |
+|  122 | suji    |       2 |   8000 |
+|  123 | kumar   |       3 |   8000 |
++------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+Question
+--------
+	== Find dept who do not have any employee.
+	
+
+mysql> select * from dept where id not in (select dept_id from employee);
++----+---------+
+| id | name    |
++----+---------+
+|  4 | Acoount |
+|  5 | HR      |
++----+---------+
+2 rows in set (0.00 sec)
+
+
+3 Correlated Sub-Query
+----------------------
+	-> Sub-Query which is related to the outer query.
+	
+	== Find the employee in each dept who earn more 
+		than the average salary in the that dept.
+		
+	mysql> select dept_id, avg(salary) from employee group by dept_id;
+	
+	
+mysql> select * from employee e1 where salary > (select avg(salary) from employee e2 where e2.dept_id = e1.dept_id);
++------+---------+---------+--------+
+| id   | name    | dept_id | salary |
++------+---------+---------+--------+
+|  121 | Rosalin |       1 |   6000 |
+|  124 | Dheetaj |       2 |  11000 |
++------+---------+---------+--------+
+2 rows in set (0.00 sec)
+
+

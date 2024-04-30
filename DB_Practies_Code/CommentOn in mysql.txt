@@ -1,0 +1,90 @@
+Comment On
+-----------
+	-> "Comment On" Statement allows you to add a comment to a database object 
+	   such as a table, column, or index.
+	-> This comment can provide additional information about the object, such as its purpose, usage or any other details.
+	
+Note 
+----
+	-> Mysql does no suppport the "Comment On" Statement
+	-> Instead you use the "Comment"
+
+Table comment: 
+-------------
+mysql> create table emp4(id int comment 'id column', name varchar(30) comment 'name column');
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table emp5(id int) comment = 'table emp5';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> alter table emp4 modify column name varchar(10) comment 'length changed'
+    -> ;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table emp4 comment = 'commnet changed';
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+Column comment: 
+--------------
+	-> To add a comment to a column, you can use the 
+	  COMMENT clause in the CREATE TABLE 
+	  or ALTER TABLE statements.
+	 
+	CREATE TABLE my_table (
+    id INT PRIMARY KEY COMMENT 'This is the primary key',
+    name VARCHAR(50) COMMENT 'This is the name of the person');
+	
+	ALTER TABLE my_table MODIFY COLUMN id INT 
+	PRIMARY KEY COMMENT 'Updated primary key comment';
+
+mysql> select table_name, table_comment from information_schema.tables where table_schema = 'comment';
+
+
+mysql> select table_name, table_comment from information_schema.tables where table_schema = 'comment';
++------------+-----------------+
+| TABLE_NAME | TABLE_COMMENT   |
++------------+-----------------+
+| emp1       | changed comment |
+| emp2       |                 |
+| emp3       |                 |
+| emp4       | commnet changed |
+| emp5       | table emp5      |
++------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> select column_name, table_name, column_comment from information_schema.columns where table_schema = 'comment';
++-------------+------------+------------------------+
+| COLUMN_NAME | TABLE_NAME | COLUMN_COMMENT         |
++-------------+------------+------------------------+
+| age         | emp1       |                        |
+| id          | emp1       |                        |
+| name        | emp1       | column comment changed |
+| id          | emp2       |                        |
+| name        | emp2       | 1st comment testing    |
+| id          | emp3       |                        |
+| name        | emp3       | index3                 |
+| id          | emp4       | id column              |
+| name        | emp4       | length changed         |
+| id          | emp5       |                        |
++-------------+------------+------------------------+
+10 rows in set (0.00 sec)
+
+mysql>
+
+mysql> create index i1 on emp4(name) comment 'index comment';
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select table_name, index_name, index_comment from information_schema.statistics where table_schema = 'comment';
++------------+------------+---------------+
+| TABLE_NAME | INDEX_NAME | INDEX_COMMENT |
++------------+------------+---------------+
+| emp1       | index1     |               |
+| emp3       | i13        | t23           |
+| emp3       | i3         |               |
+| emp4       | i1         | index comment |
++------------+------------+---------------+
+4 rows in set (0.00 sec)
