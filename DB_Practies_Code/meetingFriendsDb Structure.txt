@@ -1,0 +1,146 @@
+Create database meetingFriends;
+use meetingFriends;
+
+CREATE TABLE friend (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE location (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL UNIQUE
+);
+
+CREATE TABLE hotal (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    location_id INT NOT NULL,
+    CONSTRAINT locatinIdInHotal FOREIGN KEY (location_id)
+        REFERENCES location (id)
+);
+
+CREATE TABLE food (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE hotalfood (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hotal_id INT NOT NULL,
+    food_id INT NOT NULL,
+    CONSTRAINT totalIdInHotalFood FOREIGN KEY (hotal_id)
+        REFERENCES hotal (id),
+    CONSTRAINT foodIdInHotalFood FOREIGN KEY (food_id)
+        REFERENCES food (id)
+);
+
+CREATE TABLE meet (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hotal_id INT NOT NULL,
+    CONSTRAINT hotalIdInMeet FOREIGN KEY (hotal_id)
+        REFERENCES hotal (id)
+);
+alter table meet modify column dateTime date;
+
+CREATE TABLE meetFrds (
+    meet_id INT NOT NULL,
+    friend_id INT NOT NULL,
+    food_id INT NOT NULL,
+    CONSTRAINT meetIdInMeetFrds FOREIGN KEY (meet_id)
+        REFERENCES meet (id),
+    CONSTRAINT frienIdInMeetFrds FOREIGN KEY (friend_id)
+        REFERENCES friend (id),
+    CONSTRAINT foodIdInMeetFrds FOREIGN KEY (food_id)
+        REFERENCES food (id)
+);
+
+
+
+insert into friend(name) value('saran'), ('karan'), ('ajith'), ('vijay'), ('surya');
+
+insert into location(name) values('Tirunelveli'), ('Tenkasi'), ('Chatram'), ('Alangulam'), ('Srandai');
+
+insert into hotal(name, location_id) 
+values
+('Thavasi', 4), 
+('Raja', 4), 
+('Rahmath', 2), 
+('Mathin', 2), 
+('RR', 1), 
+('Vaira Malikai', 1),
+('saravana', 5), 
+('Arul', 5), 
+('vasanth', 3), 
+('Suji', 3);
+
+INSERT INTO food 
+(`name`)
+VALUES
+('Idli'),
+('Sambar'),
+('Chicken Cherrinad'),
+('Dosa'),
+('Vada'),
+('Uttapam'),
+('Payasam'),
+('Banana Bonda'),
+('Parotta'),
+('Kotthu Papotta'),
+('Puli Pongal'),
+('Onion Uthappam'),
+('Kuzhi Paniyaram');
+
+SELECT 
+    l.name, h.name, f.name
+FROM
+    location l
+        INNER JOIN
+    hotal h ON l.id = h.location_id
+        INNER JOIN
+    hotalfood hf ON h.id = hf.hotal_id
+        INNER JOIN
+    food f ON hf.food_id = f.id
+ORDER BY l.name;
+
+
+
+SELECT 
+    m.id AS meeting_id,
+    m.datetime AS Date,
+    h.name AS hotal_name,
+    l.name AS location_name,
+    f.name AS friend_name,
+    fd.name AS food_Name
+FROM
+    meet m
+        INNER JOIN
+    meetfrds mf ON m.id = mf.meet_id
+        INNER JOIN
+    hotal h ON m.hotal_id = h.id
+        INNER JOIN
+    location l ON h.location_id = l.id
+        INNER JOIN
+    friend f ON mf.friend_id = f.id
+        INNER JOIN
+    food fd ON mf.food_id = fd.id
+ORDER BY m.id;
+
+SELECT 
+    h.name AS hotal_name, 
+    l.name AS location_name, 
+    count(h.name) as No_Of_Time
+FROM
+    meet m
+        INNER JOIN
+    meetfrds mf ON m.id = mf.meet_id
+        INNER JOIN
+    hotal h ON m.hotal_id = h.id
+        INNER JOIN
+    location l ON h.location_id = l.id
+        INNER JOIN
+    friend f ON mf.friend_id = f.id
+        INNER JOIN
+    food fd ON mf.food_id = fd.id
+where f.id in (2, 3, 4)
+group  by hotal_name, location_name
+order by No_Of_Time desc;
