@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<style>
+.container{
+    display: flex;
+    justify-content: center;
+}
+.profile {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 2px 10px -2px black;
+    padding: 14px;
+    border-radius: 10px;
+}
+.image {
+    position: relative;
+    justify-content: center;
+    width: 50%;
+    margin-bottom: 20px;
+}
+img {
+    /* max-width: 80% !important; */
+}
+.image i {
+    font-size: 20px;
+    color: black;
+    position: absolute;
+    right: 20px;
+    bottom: 42px;
+    font-size:20px;
+    cursor: pointer;
+}
+.form-control {
+    width: 80%;
+}
+</style>
+
+<body>
+    <div class="container mt-4">
+        <div id="profile-container" class="profile d-flex flex-column"></div>
+    </div>
+
+<!-- <body>   
+    <div class="container">
+        <div class="profile d-flex flex-column">
+            <div class="row image">
+                <img src="./profile.jpg" alt="" srcset="">
+                <i class='fas fa-pen'></i>
+            </div>
+            <div class="flex-column txt-fields w-100">
+                <div class="form-group d-flex justify-content-between">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" class="form-control">
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control">
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <label for="mobileNo">Mobile No</label>
+                    <input type="tel" name="mobileNo" id="mobileNo" class="form-control">
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <label for="dob">DOB</label>
+                    <input type="date" class="date w-58" name="dob" id="dob" class="form-control">
+                </div>
+            </div>
+            <div class="button w-100">
+                <button class="btn btn-primary btnSubmit w-100">Submit</button>
+            </div>
+        </div>
+    </div>
+</body> -->
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="./user.js"></script>
+</html>
