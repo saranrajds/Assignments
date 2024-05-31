@@ -31,3 +31,14 @@
     justify-content: space-between;
     margin-top: 20px;
 }
+.start-btn {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.start-btn .btn {
+    width: 40%;
+}
+a {
+    text-decoration: none;
+}
