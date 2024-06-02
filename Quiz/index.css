@@ -9,6 +9,7 @@
     height: 10%
 }
 .content-section {
+    display: none;
     height: 90%;
 }
 .header-section h3{
@@ -32,13 +33,27 @@
     margin-top: 20px;
 }
 .start-btn {
+    display: none;
     justify-content: center;
     display: flex;
     align-items: center;
 }
-.start-btn .btn {
-    width: 40%;
+.mark-btn {
+    /* justify-content: center; */
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+}
+.quiz-body a
+{
+    width: 50%;
 }
 a {
+    text-decoration: none;
+    color: white;
+}
+.disabled-link {
+    color: gray;
+    pointer-events: none; /* This will make the link non-interactive */
     text-decoration: none;
 }

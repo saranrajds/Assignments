@@ -17,12 +17,23 @@
                 <h3>Quiz Application</h3>
             <!-- </div> -->
         </div>
-        <div class="start-btn quiz-body">
-            <button class="btn btn-primary w-20">
-               <a href="?q=1">Start</a> </button>
+        <div class="subject-option quiz-body" style="display: none;">
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    Subject 
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0)">Java</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)">C Program</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)">Javascript</a></li>
+                </ul>
+              </div>
         </div>
-        <div class="content-section">
-            <div class="quiz-body">
+        <div class="start-btn quiz-body" style="display: none;"> 
+            <a href="?q=1"><button class="btn btn-primary w-100">Start </button></a>
+        </div>
+        <div id="quiz-container" class="content-section quiz-content-section">
+            <!-- <div class="quiz-body">
                 <div class="quiz-head">
                     <div class="quiz-name">
                         <h4>Question 1</h4>
@@ -48,10 +59,10 @@
                     </div>
                 </div>
                 <div class="action-button">
-                    <button class="btn btn-primary previous">previous</button>
-                    <button class="btn btn-primary next">Next</button>
+                    <a href="?q=2"><button class="btn btn-primary previous">previous</button></a>
+                    <a href="?q=3" style="text-align: end;"><button class="btn btn-primary next">Next</button></a>                  
                 </div>
-            </div>
+            </div>  -->
         </div>
     </div>
 
