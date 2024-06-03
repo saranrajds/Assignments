@@ -29,7 +29,7 @@
 }
 .action-button {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 20px;
 }
 .start-btn {
@@ -46,7 +46,7 @@
 }
 .quiz-body a
 {
-    width: 50%;
+    /* width: 50%; */
 }
 a {
     text-decoration: none;
@@ -57,3 +57,6 @@ a {
     pointer-events: none; /* This will make the link non-interactive */
     text-decoration: none;
 }
+.disabled-link .btn {
+    background-color: lightgrey;
+ }

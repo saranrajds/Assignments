@@ -1,27 +1,26 @@
 let questions = [];
 let crtAnswer = "";
 let isChanged = false;
+
 $(document).ready(function() {
+    
     isChanged = false;
-    if(localStorage.getItem('totalMark') == null) {
-        localStorage.setItem('totalMark', 0)
-    }
+    // const params = new URLSearchParams(window.location.search);
+    // const qustionNumber = params.get('q') == null ? 0 : Number(params.get('q'));
+    // console.log(qustionNumber);
+    // let questionLen = questions.length;
 
-    const params = new URLSearchParams(window.location.search);
-    const qustionNumber = params.get('q') == null ? 0 : Number(params.get('q'));
-    console.log(qustionNumber);
-    let questionLen = questions.length;
+    $(".start-btn").show();
+    $(".quiz-content-section").hide();
 
-    if (qustionNumber == 0) {
-        $(".start-btn").show();
-        $(".quiz-content-section").hide();
-    } else {
-        $(".start-btn").hide();
-        $(".quiz-content-section").show();
-        loadQuestions(qustionNumber);
-    }
 });
 
+function onStartQuiz() {
+    console.log("onStartQuiz");
+    $(".start-btn").hide();
+    $(".quiz-content-section").show();
+    loadQuestions(1);
+}
 function loadQuestions(qustionNumber) {
     
     questions = [
@@ -82,6 +81,9 @@ function loadQuestions(qustionNumber) {
 
 function createQuizContent(qustionNumber) {
 
+    const form = document.createElement('form');
+    form.id = 'myForm';
+    
     const quizBody = document.createElement('div');
     quizBody.className = 'quiz-body';
 
@@ -92,7 +94,7 @@ function createQuizContent(qustionNumber) {
     quizName.className = 'quiz-name';
 
     const h4 = document.createElement('h4');
-    h4.textContent = 'Question 1';
+    h4.textContent = 'Question '+qustionNumber;
 
     quizName.appendChild(h4);
     quizHead.appendChild(quizName);
@@ -148,17 +150,19 @@ function createQuizContent(qustionNumber) {
         const prevButton = document.createElement('button');
         prevButton.className = 'btn btn-primary previous';
         prevButton.textContent = 'previous';
-        prevButton.onclick = () => calculateAnswer();
+        // prevButton.type = 'submit';
+        prevButton.id = "previoubtn"
+        prevButton.onclick = () => previousBtnClick(qustionNumber-1);
     
-        prevButtonLink.appendChild(prevButton);
-        actionButton.appendChild(prevButtonLink);
+        // prevButtonLink.appendChild(prevButton);
+        // actionButton.appendChild(prevButtonLink);
         
     }
    
     if (qustionNumber < questions.length) {
         const nextButtonLink = document.createElement('a');
         nextButtonLink.href = '?q='+(qustionNumber+ 1);
-        nextButtonLink.style.textAlign = 'end';
+        nextButtonLink.style.textAlign = 'center';
         nextButtonLink.classList.add('disabled-link');
 
         if(qustionNumber == 1) {
@@ -168,7 +172,9 @@ function createQuizContent(qustionNumber) {
         const nextButton = document.createElement('button');
         nextButton.className = 'btn btn-primary next';
         nextButton.textContent = 'Next';
-        nextButton.onclick = () => previousBtnClick();
+        // nextButton.type = 'submit';
+        nextButton.id = 'nextBtn';
+        nextButton.onclick = () => nextBtnClick(qustionNumber+1);
 
         nextButtonLink.appendChild(nextButton);
         actionButton.appendChild(nextButtonLink);
@@ -184,18 +190,19 @@ function createQuizContent(qustionNumber) {
         submitButton.onclick = () => submitBtnClick();
 
         submitButtonLink.appendChild(submitButton);
-        actionButton.appendChild(submitButtonLink);
-    
+        actionButton.appendChild(submitButtonLink);    
     }
     
     quizBody.appendChild(quizHead);
     quizBody.appendChild(quizQuestionBody);
     quizBody.appendChild(actionButton);
-
+    form.appendChild(quizBody);
     const quizContainer = document.getElementById('quiz-container');
-    quizContainer.appendChild(quizBody);
+    quizContainer.appendChild(form);
 
-    // getQueryParams();
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+    });
 }
 
 function checkAnswer(selectedOption, correctAnswer) {
@@ -214,39 +221,55 @@ function checkAnswer(selectedOption, correctAnswer) {
 }
 
 function validateForm() {
-    // Check if any radio button is selected
+    
     const selectedOption = document.querySelector('input[name="choice"]:checked');
     return selectedOption !== null;
 }
 
-function previousBtnClick() {
-    
-    if (isChanged) {
-
-        let totalMark = Number(localStorage.getItem('totalMark'));
-        if(totalMark > 0)
-            totalMark--;
-        else 
-            totalMark = 0;
-
-        calculateAnswer();
-    }
-    
+function previousBtnClick(qustionNumber) {
+    console.log('previousBtnClick ',qustionNumber);
+    clearQuestion(qustionNumber);
+    // if (isChanged) {
+    //     if(totalMark > 0)
+    //         totalMark--;
+    //     else 
+    //         totalMark = 0;
+    // }
 }
 
-function calculateAnswer() {
+function nextBtnClick(qustionNumber) {
+    // console.log('e ',e);
+    calculateScore();
+    clearQuestion(qustionNumber);
+
+}
+
+function calculateScore() {
     const selectedOption = document.querySelector('input[name="choice"]:checked').value;
-    let totalMark = Number(localStorage.getItem('totalMark'));
-
+    console.log("selectedOption ", selectedOption , crtAnswer);
     if (selectedOption === crtAnswer) {
-        totalMark++;
+        let totalMark = Number($("#score").text()) == '' ? 0 : Number($("#score").text());         
+        $("#score").text(totalMark + 1);
     }
+}
 
-    localStorage.setItem('totalMark', totalMark);
-    console.log("selectedOption ", selectedOption);
+function clearQuestion(qustionNumber) {
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = "";
+    createQuizContent(qustionNumber);
 }
 
 function submitBtnClick() {
-    calculateAnswer();
-    location.href = "scorePage.html";
+    calculateScore();
+
+    $(".start-btn").hide();
+    $(".quiz-content-section").hide();
+    $(".mark-btn").show();
+    let score = $("#score").text();
+    $("#total-mark").text("Total Question => " + questions.length);
+    $("#correct-mark").text("Total correct Mark => " + score);
+    $("#wrong-mark").text("Total Wrong Mark => " + Math.abs(Number(questions.length) - Number(score)));
+    window.addEventListener('popstate', function(event) {
+        history.pushState(null, null, location.href);
+    });
 }
