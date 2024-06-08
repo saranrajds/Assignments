@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Music Player</h1>
+            <input type="file" id="fileInput" multiple>
+        </header>
+        
+        <main>
+            <section id="songList" class="section">
+                <h2>Songs</h2>
+                <div id="songs"></div>
+            </section>
+
+            <section id="favorites" class="section">
+                <h2>Favorites</h2>
+                <div id="favoriteSongs"></div>
+            </section>
+
+            <section id="playlist" class="section">
+                <h2>Playlists Songs</h2>
+                <div id="playlists"></div>
+            </section>
+        </main>
+        
+        <section id="playlists" class="section">
+            <h2>Playlists</h2>
+            <div id="playlistContainer"></div>
+            <button id="addPlaylist">Add Playlist</button>
+        </section>
+
+        <footer>
+            <audio id="audioPlayer" controls></audio>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
